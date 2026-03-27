@@ -265,11 +265,15 @@ class DashboardController extends Controller
     }
 
     // Existing methods
+
     public function nilai() {
         $user = auth()->user();
-        $nilaiKadet = DB::table('nilais')->where('user_id', $user->id)->get();
+        $nilaiKadet = \App\Models\Nilai::where('user_id', $user->id)
+            ->orderBy('nama_matkul')
+            ->get();
         return view('nilai', compact('user', 'nilaiKadet'));
     }
+
 
     public function bahanAjar() {
         $user = auth()->user();
