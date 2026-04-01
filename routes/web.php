@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PengajuanController;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [DashboardController::class, 'index'])->name('home');  
@@ -20,17 +21,37 @@ Route::prefix('dosen/nilai')->name('dosen.nilai.')->group(function () {
 
 
 
+    // Pengajuan CRUD
+
+    Route::resource('pengajuan', \App\Http\Controllers\PengajuanController::class)->only(['index', 'store', 'show']);
+
+    Route::post('pengajuan/{pengajuan}/approve', [\App\Http\Controllers\PengajuanController::class, 'approve'])->name('pengajuan.approve');
+
+    Route::post('pengajuan/{pengajuan}/reject', [\App\Http\Controllers\PengajuanController::class, 'reject'])->name('pengajuan.reject');
+
+
+
     // Dosen Jadwal CRUD (protected - dosen/admin only)
 
+
+
     Route::prefix('dosen/jadwal')->name('dosen.jadwal.')->group(function () {
+
         Route::get('/', [DashboardController::class, 'jadwalIndex'])->name('index');
+
         Route::get('/create', [DashboardController::class, 'jadwalCreate'])->name('create');
+
         Route::post('/', [DashboardController::class, 'jadwalStore'])->name('store');
+
         Route::get('/{jadwal}/edit', [DashboardController::class, 'jadwalEdit'])->name('edit');
+
         Route::put('/{jadwal}', [DashboardController::class, 'jadwalUpdate'])->name('update');
+
         Route::delete('/{jadwal}', [DashboardController::class, 'jadwalDestroy'])->name('destroy');
+
     });
-    Route::get('/surat-berkas', [DashboardController::class, 'surat'])->name('surat');
+
+    Route::get('/surat-berkas', [PengajuanController::class, 'index'])->name('pengajuan.index');
     Route::get('/manajemen-akademik', [DashboardController::class, 'akademik'])->name('akademik');
     Route::get('/akun', [DashboardController::class, 'akun'])->name('akun');
     Route::get('/admin/kadet', [DashboardController::class, 'kelolaKadet'])->name('admin.kadet');
@@ -39,6 +60,7 @@ Route::prefix('dosen/nilai')->name('dosen.nilai.')->group(function () {
     // Staff Prodi routes
     Route::prefix('staff_prodi')->name('staff_prodi.')->group(function () {
         Route::get('/', [DashboardController::class, 'staffProdiIndex'])->name('index');
+        Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('staff_prodi.pengajuan');
     });
     
     // Sesprodi routes
@@ -80,6 +102,6 @@ Route::post('/auth/inline-reset', [AuthController::class, 'sendInlineResetEmail'
 // Pastikan nama route sesuai dengan yang ada di Sidebar app.blade.php
 Route::get('/bahan-ajar', [DashboardController::class, 'bahanAjar'])->name('bahan.ajar');
 Route::get('/nilai', [DashboardController::class, 'nilai'])->name('nilai');
-Route::get('/surat-berkas', [DashboardController::class, 'surat'])->name('surat');
+
 Route::get('/manajemen-akademik', [DashboardController::class, 'akademik'])->name('akademik');
 Route::get('/akun', [DashboardController::class, 'akun'])->name('akun');

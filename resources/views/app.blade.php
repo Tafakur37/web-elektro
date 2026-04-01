@@ -38,7 +38,7 @@
                     <i class="fas fa-graduation-cap w-5"></i> <span>Nilai</span>
                 </a>
                 
-                <a href="{{ route('surat') }}" class="flex items-center space-x-3 p-3 {{ Request::is('surat-berkas') ? 'bg-blue-800 border-l-4 border-yellow-400' : 'hover:bg-blue-800' }} rounded-lg transition">
+                <a href="{{ route('pengajuan.index') }}" class="flex items-center space-x-3 p-3 {{ Request::is('surat-berkas') ? 'bg-blue-800 border-l-4 border-yellow-400' : 'hover:bg-blue-800' }} rounded-lg transition">
                     <i class="fas fa-file-alt w-5"></i> <span>Surat / Berkas</span>
                 </a>
                 
@@ -57,6 +57,11 @@
                 <a href="{{ route('admin.upload') }}" class="flex items-center space-x-3 p-3 hover:bg-blue-800 rounded-lg transition {{ Request::is('admin/upload') ? 'bg-blue-800 border-l-4 border-yellow-400' : '' }}">
                     <i class="fas fa-upload w-5"></i> <span>Upload Materi</span>
                 </a>
+                @if(Auth::user()->role == 'staff_prodi')
+                <a href="{{ route('staff_prodi.pengajuan') }}" class="flex items-center space-x-3 p-3 {{ Request::is('staff_prodi/pengajuan*') ? 'bg-blue-800 border-l-4 border-yellow-400' : 'hover:bg-blue-800' }} rounded-lg transition">
+                    <i class="fas fa-file-signature text-orange-400 w-5"></i> <span>Kelola Pengajuan</span>
+                </a>
+                @endif
             @endif
 
             <hr class="border-blue-700 my-4">
