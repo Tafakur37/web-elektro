@@ -121,7 +121,7 @@
         </div>
     </div>
 
-    <!-- ⚡ LIGHTNING SCRIPT (tetap, tapi halus banget) -->
+    <!-- ⚡ LIGHTNING SCRIPT -->
     <script>
         const canvas = document.getElementById("lightning");
         const ctx = canvas.getContext("2d");
