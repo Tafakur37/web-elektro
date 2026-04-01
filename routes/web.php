@@ -57,6 +57,16 @@ Route::prefix('dosen/nilai')->name('dosen.nilai.')->group(function () {
     Route::get('/admin/kadet', [DashboardController::class, 'kelolaKadet'])->name('admin.kadet');
     Route::get('/admin/upload', [DashboardController::class, 'uploadMateri'])->name('admin.upload');
     
+    // Admin routes (superman/admin only)
+    Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
+        Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+        Route::get('/users', [AdminController::class, 'users'])->name('users');
+        Route::get('/users/create', [AdminController::class, 'createUser'])->name('users.create');
+        Route::post('/users', [AdminController::class, 'storeUser'])->name('users.store');
+        Route::post('/users/{user}/reset-password', [AdminController::class, 'resetPassword'])->name('users.reset');
+        Route::post('/impersonate', [AdminController::class, 'impersonate'])->name('impersonate');
+    });
+    
     // Staff Prodi routes
     Route::prefix('staff_prodi')->name('staff_prodi.')->group(function () {
         Route::get('/', [DashboardController::class, 'staffProdiIndex'])->name('index');

@@ -22,6 +22,19 @@ class AdminController extends Controller
         });
     }
 
+    public function dashboard()
+    {
+        $metrics = [
+            'total_users' => User::count(),
+            'total_kadet' => User::where('role', 'kadet')->count(),
+            'total_dosen' => User::where('role', 'dosen')->count(),
+            'total_staff' => User::whereIn('role', ['staff_prodi', 'sesprodi'])->count(),
+            'pending_pengajuan' => Pengajuan::where('status', 'pending')->count(),
+        ];
+
+        return view('pages.admin.dashboard', compact('metrics'));
+    }
+
     public function users()
     {
         $users = User::latest()->paginate(20);
