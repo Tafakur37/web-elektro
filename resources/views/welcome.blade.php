@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Prodi Elektro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="icon" href="/favicon.ico">
     <script src="https://cdn.tailwindcss.com"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -18,89 +19,160 @@
             }
         }
     </script>
+
+    <style>
+        canvas {
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            pointer-events: none;
+        }
+    </style>
 </head>
 
-<body class="font-sans antialiased min-h-screen overflow-hidden bg-[#0a0a0f]">
+<body class="font-sans antialiased min-h-screen overflow-hidden bg-[#f3f6fb]">
 
-    <!-- Background Gradient (lebih smooth & elegan) -->
-    <div class="absolute inset-0 bg-gradient-to-br from-[#0a0a0f] via-[#0f172a] to-[#020617]"></div>
+    <!-- ⚡ Lightning -->
+    <canvas id="lightning"></canvas>
 
-    <!-- Soft Glow -->
-    <div class="absolute top-[-100px] left-[-100px] w-[400px] h-[400px] bg-blue-500/20 blur-[120px] rounded-full"></div>
-    <div class="absolute bottom-[-120px] right-[-100px] w-[400px] h-[400px] bg-purple-500/20 blur-[120px] rounded-full"></div>
-
-    <!-- Decorative Lines -->
-    <div class="absolute inset-0 opacity-10">
-        <div class="absolute top-1/4 left-0 w-full h-px bg-white"></div>
-        <div class="absolute bottom-1/4 left-0 w-full h-px bg-white"></div>
+    <!-- Background grid soft -->
+    <div class="absolute inset-0 opacity-[0.05] 
+        bg-[linear-gradient(to_right,#3b82f6_1px,transparent_1px),
+        linear-gradient(to_bottom,#3b82f6_1px,transparent_1px)] 
+        bg-[size:80px_80px]">
     </div>
 
-    <!-- Floating Particles -->
-    <div class="absolute inset-0 pointer-events-none">
-        <div class="absolute top-20 left-10 w-2 h-2 bg-blue-400 rounded-full opacity-40 animate-pulse"></div>
-        <div class="absolute top-40 right-20 w-1.5 h-1.5 bg-purple-400 rounded-full opacity-30 animate-pulse"></div>
-        <div class="absolute bottom-32 left-1/4 w-2 h-2 bg-indigo-400 rounded-full opacity-40 animate-pulse"></div>
-        <div class="absolute bottom-20 right-10 w-1 h-1 bg-blue-300 rounded-full opacity-30 animate-pulse"></div>
-    </div>
+    <!-- Glow halus -->
+    <div class="absolute inset-0 bg-gradient-to-br from-white via-blue-50 to-blue-100"></div>
 
     <!-- Content -->
     <div class="relative z-10 flex items-center justify-center min-h-screen px-6">
 
-        <!-- Glass Card -->
-        <div class="w-full max-w-3xl backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-10 md:p-14 shadow-2xl text-center transition-all duration-500">
+        <!-- OUTER CARD -->
+        <div class="w-full max-w-md 
+            bg-gray-100 
+            rounded-[2rem] 
+            p-2 
+            shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
 
-            <!-- Title -->
-            <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight text-white">
-                Selamat Datang di 
-                <span class="block bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
-                    Web Elektro
-                </span>
+        <!-- INNER CARD -->
+         <div class="w-full 
+            bg-white 
+            rounded-[1.5rem] 
+            p-5 md:p-6 
+            text-center">
+
+            <!-- LOGO -->
+            <div class="flex justify-center mb-6"> 
+                <img src="{{ asset('image/logo.png') }}" alt="logo" class="w-28 h-28 object-contain">
+            </div>
+
+            <!-- TITLE -->
+            <h1 class="text-3xl md:text-4xl font-extrabold text-yellow-750 mb-4">
+                Selamat Datang di
             </h1>
 
-            <!-- Subtitle -->
-            <p class="text-lg md:text-xl mb-10 text-white/70 leading-relaxed max-w-xl mx-auto">
-                Sistem Informasi Akademik Terpadu untuk Program Studi Teknik Elektro
+            <h2 class="text-3xl md:text-4xl font-extrabold text-blue-700 mb-6 tracking-wide">
+                SIMLEK
+            </h2>
+
+            <!-- SUBTITLE -->
+            <p class="text-sm md:text-base text-gray-600 max-w-xl mx-auto mb-8">
+                Sistem Informasi Manajemen Teknik Elketro
             </p>
 
-            <!-- Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <!-- BUTTON -->
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
 
-                <a href="{{ url('/auth/login/kadet') }}" 
-                   class="bg-white/10 border border-white/20 text-white px-8 py-4 rounded-xl text-base font-semibold 
-                   hover:bg-white/20 hover:scale-105 transition-all duration-300 flex items-center gap-3">
+                <a href="{{ url('/auth/login/kadet') }}"
+                   class="flex items-center justify-center gap-3
+                   px-10 py-4 rounded-xl border border-blue-300 
+                   text-blue-600 font-semibold
+                   hover:bg-blue-50 transition">
 
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor">
+                        <path stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                     </svg>
 
-                    Login Sekarang
+                    Login
                 </a>
 
-                <a href="{{ url('/auth/register/kadet') }}" 
-                   class="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-4 rounded-xl text-base font-semibold 
-                   hover:scale-105 transition-all duration-300 flex items-center gap-3">
+                <a href="{{ url('/auth/register/kadet') }}"
+                   class="flex items-center justify-center gap-3
+                   px-10 py-4 rounded-xl 
+                   bg-gradient-to-r from-blue-600 to-indigo-700
+                   text-white font-semibold
+                   shadow-lg hover:scale-105 transition">
 
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor">
+                        <path stroke-width="2" d="M12 4v16m8-8H4"/>
                     </svg>
 
-                    Daftar Baru
+                    Register
                 </a>
 
             </div>
 
-            <!-- Scroll Icon -->
-            <div class="mt-10 animate-bounce">
-                <svg class="w-5 h-5 mx-auto text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                    d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                </svg>
+            <!-- Arrow -->
+            <div class="mt-10 opacity-60">
+                
             </div>
 
         </div>
     </div>
+
+    <!-- ⚡ LIGHTNING SCRIPT (tetap, tapi halus banget) -->
+    <script>
+        const canvas = document.getElementById("lightning");
+        const ctx = canvas.getContext("2d");
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener("resize", resize);
+
+        function drawLightning() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            let x = Math.random() * canvas.width;
+            let y = 0;
+
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+
+            while (y < canvas.height) {
+                x += (Math.random() - 0.5) * 50;
+                y += Math.random() * 30;
+                ctx.lineTo(x, y);
+            }
+
+            ctx.strokeStyle = "rgba(59,130,246,0.5)";
+            ctx.lineWidth = 1;
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = "#3b82f6";
+            ctx.stroke();
+        }
+
+        let lastStrike = 0;
+
+        function lightningLoop(timestamp) {
+            if (timestamp - lastStrike > 5000) {
+                if (Math.random() > 0.8) {
+                    drawLightning();
+                    lastStrike = timestamp;
+
+                    setTimeout(() => {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    }, 100);
+                }
+            }
+            requestAnimationFrame(lightningLoop);
+        }
+
+        lightningLoop();
+    </script>
 
 </body>
 </html>
