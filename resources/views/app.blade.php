@@ -47,7 +47,7 @@
                 </a>
             @endif
 
-            @if(in_array(Auth::user()->role, ['admin', 'kaprodi', 'sesprodi', 'staf', 'dosen']))
+@if(in_array(Auth::user()->role, ['admin', 'kaprodi', 'sesprodi', 'staf', 'dosen', 'staff_prodi']))
                 <div class="pt-4 pb-2 text-[10px] font-bold text-yellow-400 uppercase tracking-widest">Administrasi</div>
                 
                 <a href="{{ route('admin.kadet') }}" class="flex items-center space-x-3 p-3 hover:bg-blue-800 rounded-lg transition {{ Request::is('admin/kadet') ? 'bg-blue-800 border-l-4 border-yellow-400' : '' }}">

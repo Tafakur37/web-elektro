@@ -10,8 +10,7 @@ class PengumumanSeeder extends Seeder
 {
     public function run(): void
     {
-        // Use admin or kaprodi ID (assuming 2=admin, 1=kaprodi)
-        $adminId = User::where('identifier', 'ADMIN')->first()->id ?? 2;
+        $adminId = User::where('identifier', 'superman')->first()?->id ?? 1;
 
         $samples = [
             [
@@ -39,3 +38,5 @@ class PengumumanSeeder extends Seeder
         }
     }
 }
+?>
+

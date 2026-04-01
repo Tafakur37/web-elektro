@@ -94,7 +94,9 @@ class AuthController extends Controller
             return redirect()->intended('/home')->with('success', "Selamat datang kembali, $user->name!");
         }
 
-        return back()->with('error', 'NIM/NIP atau Password salah!')->withInput();
+        return back()->withErrors([
+            'identifier' => 'Username atau password yang anda masukkan mungkin salah'
+        ])->withInput();
     }
 
     // Logout

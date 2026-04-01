@@ -1,56 +1,37 @@
-# TODO: Implement Dosen Jadwal Management Feature
+# Role-Based Database Revamp TODO
 
-## Approved Plan Steps (Breakdown):
+## Overview
 
-### 1. Update DashboardController.php ✓
+Revamp to new identifiers/passwords: kaprodi(\"kaprodi\"/\"kaprodi\"), admin(\"superman\"/\"orangkuat\"), staff_prodi(\"staff_prodi\"/\"staffprodi\"), sesprodi(\"sesprodi\"/\"sesprodi\"). Kadet unchanged. Each identifier enables specific role functions/UI.
 
-- [x] Add jadwalIndex(), jadwalCreate(), jadwalStore(), jadwalEdit(), jadwalUpdate(), jadwalDestroy() methods.
-- [x] Enhance index() for dosen notifications (pending nilai, kadet data).
+## Steps (Progress: 3/10)
 
-### 2. Update routes/web.php
+### 1. [✅] Migration for 'staff_prodi' role enum
 
-- [ ] Add protected routes for /dosen/jadwal/\* (index, create, store, edit, update, destroy).
+### 2. [✅] DatabaseSeeder.php (new users/identifiers)
 
-### 3. Update home.blade.php (dashboard)
+### 3. [✅] PengumumanSeeder.php (superman check)
 
-- [ ] Add role-specific sections: dosen - jadwal summary/notifs/edit link; kadet - view-only.
+### 4. [✅] DashboardController.php (allowed_roles + normalization + methods)
 
-### 4. Create new views
+### 5. [ ] Update routes/web.php
 
-- [ ] resources/views/pages/dosen/jadwal-index.blade.php (cohort/semester select + table).
-- [ ] resources/views/pages/dosen/jadwal-form.blade.php (create/edit form).
+### 2. [ ] Update DatabaseSeeder.php
 
-### 5. Testing
+### 3. [ ] Update PengumumanSeeder.php
 
-- [ ] Login dosen → /home → jadwal links → CRUD jadwal → verify kadet sees changes.
-- [ ] Check notifications in dashboard.
+### 4. [ ] Update DashboardController.php
 
-## COMPLETED ✓
+### 5. [ ] Update routes/web.php
 
-All steps done:
+### 6. [ ] Update home.blade.php
 
-- [x] DashboardController updated
-- [x] Routes added
-- [x] home.blade.php enhanced
-- [x] Views created
-- [x] Ready to test
+### 7. [ ] Update app.blade.php
 
-**Test:** Login dosen → /home → Kelola Jadwal → CRUD & verify kadet view.
+### 8. [ ] Create new views for staff_prodi/sesprodi
 
-- [ ] Add protected routes for /dosen/jadwal/\* (index, create, store, edit, update, destroy).
+### 9. [ ] php artisan migrate --seed (or migrate:fresh --seed to reset)
 
-### 3. Update home.blade.php (dashboard)
+### 10. [ ] Test logins
 
-- [ ] Add role-specific sections: dosen - jadwal summary/notifs/edit link; kadet - view-only.
-
-### 4. Create new views
-
-- [ ] resources/views/pages/dosen/jadwal-index.blade.php (cohort/semester select + table).
-- [ ] resources/views/pages/dosen/jadwal-form.blade.php (create/edit form).
-
-### 5. Testing
-
-- [ ] Login dosen → /home → jadwal links → CRUD jadwal → verify kadet sees changes.
-- [ ] Check notifications in dashboard.
-
-**Progress: 0/5 complete. Next: Step 1 - Update DashboardController.php**
+**Completed: None**

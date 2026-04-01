@@ -14,8 +14,12 @@ class Pengumuman extends Model
     protected $fillable = [
         'title',
         'content',
-        'created_by',
-        'is_active'
+        'is_active',
+        'created_by'
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
     ];
 
     public function creator()
@@ -23,3 +27,5 @@ class Pengumuman extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 }
+?>
+

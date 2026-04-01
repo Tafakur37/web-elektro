@@ -11,11 +11,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/nilai', [DashboardController::class, 'nilai'])->name('nilai');
 
     // Dosen Nilai Management (protected - dosen/admin only)
-    Route::prefix('dosen/nilai')->name('dosen.nilai.')->group(function () {
+Route::prefix('dosen/nilai')->name('dosen.nilai.')->group(function () {
         Route::get('/', [DashboardController::class, 'nilaiIndex'])->name('index');
         Route::get('/{kadet}/form', [DashboardController::class, 'nilaiForm'])->name('form');
         Route::post('/', [DashboardController::class, 'nilaiStore'])->name('store');
+        Route::delete('/{nilai}', [DashboardController::class, 'nilaiDestroy'])->name('destroy');        Route::post('/{nilai}/delete', [DashboardController::class, 'nilaiDestroy'])->name('delete');
     });
+
+
 
     // Dosen Jadwal CRUD (protected - dosen/admin only)
 
@@ -32,7 +35,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/akun', [DashboardController::class, 'akun'])->name('akun');
     Route::get('/admin/kadet', [DashboardController::class, 'kelolaKadet'])->name('admin.kadet');
     Route::get('/admin/upload', [DashboardController::class, 'uploadMateri'])->name('admin.upload');
+    
+    // Staff Prodi routes
+    Route::prefix('staff_prodi')->name('staff_prodi.')->group(function () {
+        Route::get('/', [DashboardController::class, 'staffProdiIndex'])->name('index');
+    });
+    
+    // Sesprodi routes
+    Route::prefix('sesprodi')->name('sesprodi.')->group(function () {
+        Route::get('/', [DashboardController::class, 'sesprodiIndex'])->name('index');
+    });
 });
+
 // 1. Halaman Welcome
 Route::get('/', function () {
     return view('welcome');
@@ -43,6 +57,11 @@ Route::get('/pilih-role/{aksi}', [AuthController::class, 'pilihRole'])->name('pi
 
 // 3. Halaman Form (Login/Register sesuai role)
 Route::get('/auth/{aksi}/{role}', [AuthController::class, 'showForm'])->name('auth.form');
+
+// Login redirect (fixes Route [login] not found)
+Route::get('/login', function () {
+    return redirect('/pilih-role/login');
+})->name('login');
 
 // Proses Action
 Route::post('/register-process', [AuthController::class, 'register'])->name('register.post');

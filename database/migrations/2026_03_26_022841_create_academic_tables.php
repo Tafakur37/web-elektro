@@ -26,8 +26,13 @@ return new class extends Migration
         $table->id();
         $table->foreignId('user_id')->constrained('users'); // ID Kadet
         $table->string('nama_matkul');
-        $table->string('grade', 2); // A, B, C, dst
-        $table->integer('skor'); // 0-100
+        $table->decimal('tugas', 5, 2)->default(0);
+        $table->decimal('uts', 5, 2)->default(0);
+        $table->boolean('remedial_uts')->default(false);
+        $table->decimal('uas', 5, 2)->default(0);
+        $table->boolean('remedial_uas')->default(false);
+        $table->decimal('total_nilai', 5, 2);
+        $table->string('grade', 2);
         $table->foreignId('dosen_id')->constrained('users');
         $table->timestamps();
     });

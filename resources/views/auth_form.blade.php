@@ -35,7 +35,7 @@
 
             <div id="loginFields" class="mb-4">
                 <label id="identifierLabel" class="block text-gray-700 font-semibold mb-1">
-                    {{ $aksi == 'login' ? 'USERNAME' : ($role == 'kadet' ? 'NIM' : 'NIP / ID User') }}
+                    {{ $aksi == 'login' ? 'Username' : ($role == 'kadet' ? 'NIM' : 'NIP / ID User') }}
                 </label>
                 <input type="text" id="identifierInput" name="identifier" class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="{{ $aksi == 'login' ? 'Masukkan username Anda' : ($role == 'kadet' ? '3yyyy0402xxx' : 'Masukkan ID') }}" value="{{ old('identifier') }}" required>
                 @error('identifier') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
@@ -62,8 +62,8 @@
 
             <div id="passwordField" class="mb-4">
                 <label id="passwordLabel" class="block text-gray-700 font-semibold mb-1">Password</label>
-                <input type="password" id="passwordInput" name="password" class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Minimal 8 karakter" required>
-@if($aksi == 'login')
+                <input type="password" id="passwordInput" name="password" class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan password Anda" required>
+ @if($aksi == 'login')
                     <div class="text-right mt-2">
                         <span class="lupa-link cursor-pointer text-sm text-blue-600 underline hover:text-blue-800 select-none" onclick="toggleLupaForm()">Lupa Password?</span>
                     </div>

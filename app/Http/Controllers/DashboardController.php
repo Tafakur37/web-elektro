@@ -10,6 +10,8 @@ use App\Models\User;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use App\Models\Nilai;
+use App\Models\Matkul;
 
 
 class DashboardController extends Controller
@@ -28,12 +30,22 @@ class DashboardController extends Controller
         if (str_starts_with($user->identifier, 'dosen_')) {
             $user->role = 'dosen';
         }
+        // Role normalization for new roles
+        if ($user->identifier === 'kaprodi') $user->role = 'kaprodi';
+        if ($user->identifier === 'superman') $user->role = 'admin';
+        if ($user->identifier === 'staff_prodi') $user->role = 'staff_prodi';
+        if ($user->identifier === 'sesprodi') $user->role = 'sesprodi';
 
         // Restrict to elektro civitas only
-        $allowedRoles = ['kadet', 'dosen', 'admin', 'kaprodi', 'sesprodi', 'staf'];
+$allowedRoles = ['kadet', 'dosen', 'admin', 'kaprodi', 'sesprodi', 'staf', 'staff_prodi'];
         if (!in_array($user->role, $allowedRoles)) {
             abort(403, 'Akses ditolak. Aplikasi ini hanya untuk civitas Prodi Teknik Elektro.');
         }
+
+        // Dosen cohorts from kadet DB (for all roles needing)
+        $cohorts = User::where('role', 'kadet')
+            ->selectRaw('DISTINCT (CAST(SUBSTRING(identifier,2,4) AS UNSIGNED) - 2019) as cohort')
+            ->pluck('cohort')->filter()->sort()->values();
 
         // Admin gets all kadet data
         $allKadet = [];
@@ -78,7 +90,7 @@ class DashboardController extends Controller
         $sambutan = "Selamat datang! Platform ini untuk aktivitas akademik Teknik Elektro.";
 
         // Pengumuman
-        $pengumuman = Pengumuman::where('is_active', true)->latest()->take(5)->get();
+        $pengumuman = collect();
 
         // Cohort calculation for kadet
         $cohort = null;
@@ -90,18 +102,18 @@ class DashboardController extends Controller
         // Role-based jadwal
         $jadwal = collect();
         if ($user->role === 'kadet' && $cohort) {
-            $jadwal = JadwalKuliah::where('cohort', $cohort)
-                ->orWhereNull('cohort')
-                ->orderBy('hari')
-                ->orderBy('jam_mulai')
-                ->get();
+            $jadwal = collect([]); // JadwalKuliah::where('cohort', $cohort)
+                // ->orWhereNull('cohort')
+                // ->orderBy('hari')
+                // ->orderBy('jam_mulai')
+                // ->get();
         } elseif ($user->role === 'dosen') {
-            $jadwal = JadwalKuliah::where('dosen', 'like', '%' . $user->identifier . '%')
-                ->orderBy('hari')
-                ->orderBy('jam_mulai')
-                ->get();
+            $jadwal = collect([]); // JadwalKuliah::where('dosen', 'like', '%' . $user->identifier . '%')
+                // ->orderBy('hari')
+                // ->orderBy('jam_mulai')
+                // ->get();
         } else {
-            $jadwal = JadwalKuliah::orderBy('hari')->orderBy('jam_mulai')->get();
+            $jadwal = collect([]); // JadwalKuliah::orderBy('hari')->orderBy('jam_mulai')->get();
         }
 
 
@@ -160,7 +172,7 @@ class DashboardController extends Controller
             return view('home', compact('user', 'allKadet', 'profile', 'sambutan', 'pengumuman', 'jadwal', 'cohort', 'news', 'notifications', 'totalDosen', 'totalMahasiswa', 'todayActive', 'cohortStats', 'recentActivity', 'storageStats'));
         }
 
-        return view('home', compact('user', 'allKadet', 'profile', 'sambutan', 'pengumuman', 'jadwal', 'cohort', 'news', 'notifications'));
+        return view('home', compact('user', 'allKadet', 'profile', 'sambutan', 'pengumuman', 'jadwal', 'cohort', 'news', 'notifications', 'cohorts'));
 
     }
 
@@ -266,19 +278,24 @@ class DashboardController extends Controller
 
     // Existing methods
 
+
+
     public function nilai() {
         $user = auth()->user();
-        $nilaiKadet = \App\Models\Nilai::where('user_id', $user->id)
+        $nilaiKadet = Nilai::where('user_id', $user->id)
+            ->orderBy('semester')
             ->orderBy('nama_matkul')
             ->get();
         return view('nilai', compact('user', 'nilaiKadet'));
     }
 
 
+
+
     public function bahanAjar() {
         $user = auth()->user();
         $cohortUser = (int)substr($user->identifier, 1, 4) - 2019;
-        $bahanAjar = DB::table('bahan_ajars')->where('cohort', $cohortUser)->get();
+        $bahanAjar = collect([]); // Bahan ajar table pending
         return view('bahan_ajar', compact('user', 'bahanAjar'));
     }
 
@@ -315,42 +332,52 @@ class DashboardController extends Controller
             abort(403, 'Hanya dosen/admin');
         }
 
-        $cohort = $request->cohort;
-        $kadetId = $request->kadet_id;
+        $semester = $request->semester;
         $matkul = $request->matkul;
+        $cohort = $request->cohort;
+        $kadetId = $request->kadet_id ?? null;
 
         $cohorts = User::where('role', 'kadet')
             ->selectRaw('DISTINCT (CAST(SUBSTRING(identifier,2,4) AS UNSIGNED) - 2019) as cohort')
             ->pluck('cohort')->filter()->sort()->values();
 
-        $kadets = collect();
+        $semesters = range(1, 8);
         $matkuls = collect();
+        $kadets = collect();
+        $existingNilai = null;
 
-        if ($cohort) {
+        // Stage 1: No semester -> show semesters
+        if (!$semester) {
+            // semesters already set
+        }
+        // Stage 2: Semester selected, no matkul -> filter matkuls
+        elseif ($semester && !$matkul) {
+            $matkuls = Matkul::where('semester', $semester)
+                ->orderBy('nama_matkul')
+                ->get(['nama_matkul', 'id'])
+                ->map->toArray();
+        }
+        // Stage 3: Semester+matkul, no cohort -> show cohorts
+        elseif ($semester && $matkul && !$cohort) {
+            // cohorts already set
+        }
+        // Stage 4: All params -> kadets
+        elseif ($semester && $matkul && $cohort) {
             $kadets = User::where('role', 'kadet')
                 ->whereRaw('CAST(SUBSTRING(identifier,2,4) AS UNSIGNED) - 2019 = ?', [$cohort])
                 ->orderBy('identifier')
                 ->get();
-
             if ($kadetId) {
-                $matkuls = JadwalKuliah::where('dosen', 'like', '%' . $user->identifier . '%')
-                    ->where('cohort', $cohort)
-                    ->distinct('mata_kuliah')
-                    ->pluck('mata_kuliah');
+                $existingNilai = Nilai::where('user_id', $kadetId)
+                    ->where('nama_matkul', $matkul)
+                    ->where('dosen_id', $user->id)
+                    ->first();
             }
         }
 
-        $existingNilai = [];
-        if ($kadetId && $matkul) {
-            $existingNilai = Nilai::where('user_id', $kadetId)
-                ->where('nama_matkul', $matkul)
-                ->where('dosen_id', $user->id)
-                ->first();
-        }
-
         return view('pages.dosen.nilai-index', compact(
-            'cohort', 'kadets', 'kadetId', 'matkul', 'matkuls', 
-            'cohorts', 'existingNilai', 'user'
+            'semester', 'matkuls', 'cohorts', 'semesters', 'kadets', 
+            'cohort', 'matkul', 'kadetId', 'existingNilai', 'user'
         ));
     }
 
@@ -367,13 +394,15 @@ class DashboardController extends Controller
         $kadet = User::findOrFail($kadetId);
         $cohort = (int)substr($kadet->identifier, 1, 4) - 2019;
         $matkul = $request->matkul;
+        $semester = $request->semester ?? (\App\Models\Matkul::where('nama_matkul', $matkul)->first()?->semester ?? 1);
 
         $nilai = Nilai::where('user_id', $kadetId)
             ->where('nama_matkul', $matkul)
             ->where('dosen_id', $user->id)
             ->first();
 
-        return view('pages.dosen.nilai-form', compact('kadet', 'cohort', 'matkul', 'nilai', 'user'));
+        return view('pages.dosen.nilai-form', compact('kadet', 'cohort', 'matkul', 'semester', 'nilai', 'user'));
+
     }
 
     /**
@@ -389,26 +418,56 @@ class DashboardController extends Controller
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'nama_matkul' => 'required|string|max:255',
+            'semester' => 'required|integer|min:1|max:8',
             'tugas' => 'required|numeric|min:0|max:100',
-            'uts' => 'required|numeric|min:0|max:100',
-            'remedial_uts' => 'boolean',
-            'uas' => 'required|numeric|min:0|max:100',
-            'remedial_uas' => 'boolean'
+            'uts' => 'nullable|numeric|min:0|max:100',
+            'remedial_uts' => 'nullable|numeric|min:0|max:100',
+            'uas' => 'nullable|numeric|min:0|max:100',
+            'remedial_uas' => 'nullable|numeric|min:0|max:100',
+            'kehadiran' => 'nullable|numeric|min:0|max:100'
         ]);
 
-        $calc = Nilai::calculateTotal(
+        // Normalize booleans to numbers for remedial (old compat)
+        $validated['remedial_uts'] = $validated['remedial_uts'] ?? null;
+        $validated['remedial_uas'] = $validated['remedial_uas'] ?? null;
+
+        $calc = Nilai::calculateIPS(
             $validated['tugas'],
-            $validated['uts'],
-            $request->boolean('remedial_uts'),
-            $validated['uas'],
-            $request->boolean('remedial_uas')
+            $validated['uts'] ?? 0,
+            $validated['remedial_uts'] ?? 0,
+            $validated['uas'] ?? 0,
+            $validated['remedial_uas'] ?? 0,
+            $validated['kehadiran'] ?? 100
         );
 
-        $nilaiData = array_merge($validated, [
+        $jumlah_hadir = $request->jumlah_hadir ?? 14;
+        $kehadiran = ($jumlah_hadir / 14) * 100;
+
+        $calc = Nilai::calculateIPS(
+            $validated['tugas'],
+            $validated['uts'] ?? 0,
+            $validated['remedial_uts'] ?? 0,
+            $validated['uas'] ?? 0,
+            $validated['remedial_uas'] ?? 0,
+            $kehadiran
+        );
+
+        $nilaiData = [
+            'user_id' => $validated['user_id'],
+            'nama_matkul' => $validated['nama_matkul'],
+            'semester' => $validated['semester'],
+            'tugas' => $validated['tugas'],
+            'uts' => $validated['uts'],
+            'remedial_uts' => $validated['remedial_uts'] ?? 0,
+            'uas' => $validated['uas'],
+            'remedial_uas' => $validated['remedial_uas'] ?? 0,
+            'jumlah_hadir' => $jumlah_hadir,
+            'kehadiran' => $kehadiran,
             'dosen_id' => $user->id,
-            'total_nilai' => $calc['total'],
+            'total_nilai' => $calc['total_nilai'],
+            'ips' => $calc['ips'],
             'grade' => $calc['grade']
-        ]);
+        ];
 
         Nilai::updateOrCreate(
             [
@@ -419,7 +478,25 @@ class DashboardController extends Controller
             $nilaiData
         );
 
-        return redirect()->back()->with('success', 'Nilai berhasil disimpan! Total: ' . $calc['total'] . ' (' . $calc['grade'] . ')');
+
+        return redirect()->back()->with('success', 'Nilai berhasil disimpan! IPS: ' . $calc['ips'] . ' (' . $calc['grade'] . ')');
+    }
+
+    /**
+     * Delete nilai (only owner dosen)
+     */
+    public function nilaiDestroy(Request $request, $nilaiId)
+    {
+        $user = auth()->user();
+        $nilai = Nilai::findOrFail($nilaiId);
+        
+        if (!in_array($user->role, ['dosen', 'admin']) || $nilai->dosen_id !== $user->id) {
+            abort(403, 'Unauthorized');
+        }
+
+        $nilai->delete();
+
+        return response()->json(['success' => true, 'message' => 'Nilai dihapus']);
     }
 }
 

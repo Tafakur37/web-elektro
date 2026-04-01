@@ -26,19 +26,19 @@ class DatabaseSeeder extends Seeder
 
         // Kaprodi test account (created by admin simulation)
         User::create([
-            'name' => 'KAPRODI',
-            'identifier' => 'KAPRODI',
+            'name' => 'Kaprodi',
+            'identifier' => 'kaprodi',
             'email' => 'kaprodi@gmail.com',
-            'password' => Hash::make('87654321'),
+            'password' => Hash::make('kaprodi'),
             'role' => 'kaprodi',
         ]);
 
-// Admin test account (created by admin simulation)
+        // Admin test account (created by admin simulation)
         User::create([
-            'name' => 'ADMIN',
-            'identifier' => 'ADMIN',
-            'email' => 'admin@gmail.com',
-            'password' => Hash::make('admin'),
+            'name' => 'Superman',
+            'identifier' => 'superman',
+            'email' => 'superman@gmail.com',
+            'password' => Hash::make('orangkuat'),
             'role' => 'admin',
         ]);
 
@@ -51,14 +51,33 @@ class DatabaseSeeder extends Seeder
             'role' => 'dosen',
         ]);
 
+        // Staff Prodi test account
+        User::create([
+            'name' => 'Staff Prodi',
+            'identifier' => 'staff_prodi',
+            'email' => 'staff_prodi@gmail.com',
+            'password' => Hash::make('staffprodi'),
+            'role' => 'staff_prodi',
+        ]);
+
+        // Sesprodi test account
+        User::create([
+            'name' => 'Sesprodi',
+            'identifier' => 'sesprodi',
+            'email' => 'sesprodi@gmail.com',
+            'password' => Hash::make('sesprodi'),
+            'role' => 'sesprodi',
+        ]);
+
         // Run new seeders (only if users exist)
-        if (User::where('identifier', 'ADMIN')->exists()) {
+        if (User::where('identifier', 'superman')->exists()) {
             $this->call([
+                MatkulSeeder::class,
                 JadwalSeeder::class,
                 PengumumanSeeder::class,
             ]);
         }
     }
 }
-
+?>
 
