@@ -51,15 +51,16 @@
 
             <!-- INNER CARD -->
             <div class="w-full 
-                bg-white/90 backdrop-blur-md
+                bg-white/80 backdrop-blur-md
                 rounded-[1.5rem] 
                 p-6 md:p-8">
 
                 <!-- LOGO & TITLE -->
                 <div class="text-center mb-8">
                     <div class="flex justify-center mb-6"> 
-                        <img src="{{ asset('image/logo.png') }}" alt="logo" class="w-24 h-24 object-contain mx-auto shadow-lg">
-                    </div>
+                        <img src="{{ asset('image/logo.png') }}" 
+                        alt="logo" class="w-24 h-24 object-contain">
+                </div>
                     <h1 class="text-2xl md:text-3xl font-black text-blue-950 mb-3 leading-tight">
                         {{ $aksi == 'login' ? 'Silakan Masuk' : 'Buat Akun ' . ucfirst($role) }}
                     </h1>
