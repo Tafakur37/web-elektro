@@ -89,6 +89,9 @@ Halo, {{ $user->name ?? 'User' }}!
                 <p class="text-3xl font-bold">{{ $totalDosen }}</p>
             </div>
         </div>
+        <a href="{{ route('admin.users') }}?role=dosen" class="inline-flex items-center justify-center w-full px-4 py-2 bg-white/30 backdrop-blur rounded-xl hover:bg-white/50 transition font-bold text-sm mt-2">
+            <i class="fas fa-eye mr-1"></i>Lihat Detail
+        </a>
     </div>
     <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-8 rounded-xl shadow-lg">
         <div class="flex items-center mb-4">
@@ -98,6 +101,9 @@ Halo, {{ $user->name ?? 'User' }}!
                 <p class="text-3xl font-bold">{{ $totalMahasiswa }}</p>
             </div>
         </div>
+        <a href="{{ route('admin.users') }}?role=kadet" class="inline-flex items-center justify-center w-full px-4 py-2 bg-white/30 backdrop-blur rounded-xl hover:bg-white/50 transition font-bold text-sm mt-2">
+            <i class="fas fa-eye mr-1"></i>Lihat Detail
+        </a>
     </div>
     @endif
     <div class="bg-gradient-to-br from-green-500 to-green-600 text-white p-8 rounded-xl shadow-lg">

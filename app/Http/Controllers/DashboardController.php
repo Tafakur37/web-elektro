@@ -313,8 +313,10 @@ $allowedRoles = ['kadet', 'dosen', 'admin', 'kaprodi', 'sesprodi', 'staf', 'staf
 
     public function kelolaKadet() {
         $user = auth()->user();
-        $kadet = User::where('role', 'kadet')->orderBy('identifier')->get();
-        return view('pages.admin.kelola-kadet', compact('user', 'kadet'));
+        if ($user->identifier !== 'superman' && $user->role !== 'admin') {
+            abort(403, 'Admin only');
+        }
+        return view('pages.admin.users-choose');
     }
 
 

@@ -48,14 +48,18 @@
             @endif
 
 @if(in_array(Auth::user()->role, ['admin', 'kaprodi', 'sesprodi', 'staf', 'dosen', 'staff_prodi']))
-                <div class="pt-4 pb-2 text-[10px] font-bold text-yellow-400 uppercase tracking-widest">Administrasi</div>
-                
-                <a href="{{ route('admin.kadet') }}" class="flex items-center space-x-3 p-3 hover:bg-blue-800 rounded-lg transition {{ Request::is('admin/kadet') ? 'bg-blue-800 border-l-4 border-yellow-400' : '' }}">
-                    <i class="fas fa-users-cog w-5 text-yellow-500"></i> <span>Kelola Kadet</span>
+<a href="{{ route('admin.kadet') }}" class="flex items-center space-x-3 p-3 hover:bg-blue-800 rounded-lg transition {{ Request::is('admin/kadet') ? 'bg-blue-800 border-l-4 border-yellow-400' : '' }}">
+                    <i class="fas fa-users w-5"></i> <span>Kelola User</span>
+                </a>
+                <a href="{{ route('admin.users.create') }}" class="flex items-center space-x-3 p-3 hover:bg-blue-800 rounded-lg transition {{ Request::is('admin/users/create') ? 'bg-blue-800 border-l-4 border-yellow-400' : '' }}">
+                    <i class="fas fa-user-plus w-5"></i> <span>Buat Akun</span>
                 </a>
                 
                 <a href="{{ route('admin.upload') }}" class="flex items-center space-x-3 p-3 hover:bg-blue-800 rounded-lg transition {{ Request::is('admin/upload') ? 'bg-blue-800 border-l-4 border-yellow-400' : '' }}">
                     <i class="fas fa-upload w-5"></i> <span>Upload Materi</span>
+                </a>
+                <a href="{{ route('admin.activity-log') }}" class="flex items-center space-x-3 p-3 hover:bg-blue-800 rounded-lg transition {{ Request::is('admin/activity-log') ? 'bg-blue-800 border-l-4 border-yellow-400' : '' }}">
+                    <i class="fas fa-history w-5"></i> <span>Log Aktivitas</span>
                 </a>
             @endif
 
