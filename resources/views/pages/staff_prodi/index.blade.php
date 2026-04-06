@@ -18,34 +18,32 @@ Dashboard Staff Prodi
             <p class="text-gray-600">Kelola tugas staff prodi Teknik Elektro</p>
         </div>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div class="bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-xl shadow-lg">
             <h4 class="text-lg font-bold mb-2">Tugas Hari Ini</h4>
             <p class="text-3xl font-bold">5</p>
         </div>
-        <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl shadow-lg">
-            <h4 class="text-lg font-bold mb-2">Dokumen Pending</h4>
-            <p class="text-3xl font-bold">2</p>
+        <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 text-white p-6 rounded-xl shadow-lg">
+            <h4 class="text-lg font-bold mb-2">Pengajuan Pending</h4>
+            <p class="text-3xl font-bold">{{ $stats['pending_pengajuan'] ?? 0 }}</p>
         </div>
         <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-xl shadow-lg">
-            <h4 class="text-lg font-bold mb-2">Laporan Bulanan</h4>
-            <p class="text-3xl font-bold">1</p>
+            <h4 class="text-lg font-bold mb-2">Total Pengajuan</h4>
+            <p class="text-3xl font-bold">{{ $stats['total_pengajuan'] ?? 0 }}</p>
         </div>
     </div>
     <div class="mt-8 p-6 bg-gray-50 rounded-xl">
-        <h4 class="font-bold text-lg mb-4">Fitur Staff Prodi</h4>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="text-center p-4 border-r">
-                <i class="fas fa-file-invoice text-2xl text-green-600 mb-2"></i>
-                <p class="font-semibold">Kelola Dokumen</p>
-            </div>
-            <div class="text-center p-4 border-r">
-                <i class="fas fa-clipboard-list text-2xl text-blue-600 mb-2"></i>
-                <p class="font-semibold">Laporan Prodi</p>
-            </div>
-            <div class="text-center p-4">
-                <i class="fas fa-users text-2xl text-orange-600 mb-2"></i>
-                <p class="font-semibold">Data Staff</p>
+        <h4 class="font-bold text-lg mb-6">Fitur Staff Prodi</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <a href="{{ route('staff_prodi.pengajuan') }}" class="group bg-gradient-to-br from-blue-500 to-indigo-600 text-white p-8 rounded-2xl hover:from-blue-600 hover:to-indigo-700 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all group">
+                <i class="fas fa-file-signature text-4xl mb-4 opacity-90 group-hover:opacity-100"></i>
+                <h5 class="font-bold text-xl mb-2">Kelola Pengajuan</h5>
+                <p class="opacity-90">Setujui/tolak pesiar, IB, LWE kadet</p>
+            </a>
+            <div class="p-8 text-center border-2 border-dashed border-gray-300 rounded-2xl hover:border-gray-400 transition">
+                <i class="fas fa-cog text-4xl text-gray-400 mb-4"></i>
+                <h5 class="font-bold text-xl mb-2 text-gray-700">Fitur Lainnya</h5>
+                <p class="text-gray-500">Segera hadir</p>
             </div>
         </div>
     </div>
